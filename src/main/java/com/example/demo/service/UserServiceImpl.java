@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.bo.CreateUserRequest;
+import com.example.demo.bo.UpdateUser;
 import com.example.demo.bo.UserResponse;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.repository.UserRepository;
@@ -21,12 +22,34 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(CreateUserRequest request) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(request.getName());
-        userEntity.setUsername(request.getUsername().toLowerCase());// for the user name to be lowecase
+        userEntity.setEmail(request.getEmail());
+        userEntity.setAddress(request.getAddress());
+        userEntity.setPhoneNumber(request.getPhoneNumber());
+        userEntity.setUsername(request.getUsername());
+        userEntity.setUsername(request.getUsername().toLowerCase());// for the username to be lowercase
         userEntity.setPassword(bCryptPasswordEncoder.encode(request.getPassword())); // todo fick fixa encoding!!!
 
         userEntity.setRole(request.getRole());
         userEntity = userRepository.save(userEntity);
         UserResponse response = new UserResponse(userEntity.getId(), userEntity.getName());
         return response;
+    }
+
+    @Override
+    public boolean updateUserService(UpdateUser request) {
+        UserEntity userEntity = userRepository.findById(request.getId()).orElse(null);
+        if (userEntity != null){
+            userEntity.setUsername(request.getUsername());
+            userEntity.setEmail(request.getEmail());
+            userEntity.setPhoneNumber(request.getPhoneNumber());
+            userEntity.setPassword(request.getPassword());
+            userEntity= userRepository.save(userEntity);
+
+        }else {
+            return null;
+        }
+
+
+        return false;
     }
 }
