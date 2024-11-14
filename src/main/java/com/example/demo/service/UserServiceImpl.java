@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(CreateUserRequest request) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(request.getName());
-        userEntity.setUsername(request.getUsername());
+        userEntity.setUsername(request.getUsername().toLowerCase());// for the user name to be lowecase
         userEntity.setPassword(bCryptPasswordEncoder.encode(request.getPassword())); // todo fick fixa encoding!!!
 
         userEntity.setRole(request.getRole());
